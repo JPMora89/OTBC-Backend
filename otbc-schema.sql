@@ -1,3 +1,5 @@
+
+
 -- Create users table
 CREATE TABLE users (
   username VARCHAR(50) PRIMARY KEY,
@@ -18,10 +20,17 @@ CREATE TABLE coins (
   last_updated TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create watchlist table
-CREATE TABLE watchlist (
-  id SERIAL PRIMARY KEY,
+-- Create watchlists table
+CREATE TABLE watchlists (
+  watchlist_id SERIAL PRIMARY KEY,
   username VARCHAR(50) REFERENCES users(username) ON DELETE CASCADE,
-  coin_id VARCHAR(100) NOT NULL REFERENCES coins(coin_id) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create watchlist_items table
+CREATE TABLE watchlist_items (
+  watchlist_item_id SERIAL PRIMARY KEY,
+  watchlist_id INTEGER REFERENCES watchlists(watchlist_id) ON DELETE CASCADE,
+  coin_id VARCHAR(100) NOT NULL REFERENCES coins(coin_id) ON DELETE CASCADE
 );

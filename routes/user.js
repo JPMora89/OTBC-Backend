@@ -11,10 +11,13 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const userNewSchema = require("../schemas/userNew.json");
 const userUpdateSchema = require("../schemas/userUpdate.json");
+const Watchlist = require("../models/watchlist");
+
 
 const router = express.Router();
 
-
+// Middleware to authenticate the JWT token
+router.use(ensureLoggedIn);
 /** POST / { user }  => { user, token }
  *
  * Adds a new user. This is not the registration endpoint --- instead, this is
@@ -38,6 +41,28 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
     const user = await User.register(req.body);
     const token = createToken(user);
     return res.status(201).json({ user, token });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** POST /watchlist => { watchlistName: "Watchlist name" }
+ *
+ * Create a new watchlist for the user.
+ *
+ * Authorization required: authenticated user
+ **/
+router.post("/watchlist", ensureLoggedIn, async function (req, res, next) {
+  try {
+    const { watchlistName } = req.body;
+    const { username } = res.locals.user; // Access the username from res.locals.user
+
+    // Perform any necessary validation on watchlistName
+
+    // Create the new watchlist
+    const watchlist = await Watchlist.createWatchlist(username, watchlistName);
+
+    return res.status(201).json({ watchlist });
   } catch (err) {
     return next(err);
   }

@@ -6,6 +6,26 @@ const Watchlist = require("../models/watchlist");
 
 const router = express.Router();
 
+/** POST /watchlist/ => { watchlist }
+ *
+ * Create a new watchlist for the user.
+ *
+ * Authorization required: authenticated user
+ **/
+router.post("/", ensureLoggedIn, async function (req, res, next) {
+  try {
+    const { username } = req.user;
+    const { name } = req.body;
+
+    const watchlist = await Watchlist.createWatchlist(username, name);
+
+    return res.status(201).json({ watchlist });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
 /** POST /watchlist/:coinId => { message: "Coin added to watchlist" }
  *
  * Add a coin to the user's watchlist.

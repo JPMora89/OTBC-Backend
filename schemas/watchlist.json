@@ -1,20 +1,38 @@
 {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "integer"
-      },
-      "user_id": {
-        "type": "integer"
-      },
-      "coin_id": {
-        "type": "integer"
-      },
-      "created_at": {
-        "type": "string",
-        "format": "date-time"
-      }
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
     },
-    "required": ["id", "user_id", "coin_id", "created_at"]
-  }
-  
+    "user_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "coin_id": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "coin_id", "created_at"]
+      }
+    }
+  },
+  "required": ["id", "user_id", "name", "created_at", "items"]
+}
