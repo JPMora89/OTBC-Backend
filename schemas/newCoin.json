@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "symbol": {
+        "type": "string"
+      },
+      "market_cap": {
+        "type": "number"
+      },
+      "current_price": {
+        "type": "number"
+      },
+      "price_change_percentage": {
+        "type": "number"
+      },
+      "last_updated": {
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "required": []
+  }
+  

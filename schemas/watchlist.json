@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "user_id": {
+        "type": "integer"
+      },
+      "coin_id": {
+        "type": "integer"
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "required": ["id", "user_id", "coin_id", "created_at"]
+  }
+  
