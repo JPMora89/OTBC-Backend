@@ -1,3 +1,5 @@
+
+
 const db = require("../db");
 const axios = require("axios");
 
@@ -19,22 +21,12 @@ class Coin {
       });
 
       const coins = response.data;
-      console.log(coins, "here are the coins!")
+      console.log(coins, "here are the coins!");
 
-      // // // Update coins table in the database
+      // Update coins table in the database
+      await db.query("DELETE FROM watchlist_items");
+      await db.query("TRUNCATE TABLE coins RESTART IDENTITY CASCADE");
 
-      // await db.query("DELETE FROM watchlist");
-      // await db.query("TRUNCATE TABLE coins RESTART IDENTITY CASCADE");
-          // Delete data from the watchlist table
-    await db.query("DELETE FROM watchlist");
-
-    // Delete data from the coins table
-    await db.query("DELETE FROM coins");
-
-    // Restart the sequences for both tables
-    await db.query("ALTER SEQUENCE coins_id_seq RESTART WITH 1");
-    await db.query("ALTER SEQUENCE watchlist_id_seq RESTART WITH 1");
-      
       for (const coin of coins) {
         await db.query(
           `INSERT INTO coins (coin_id, name, symbol, price)
@@ -70,3 +62,4 @@ class Coin {
 }
 
 module.exports = Coin;
+

@@ -1,13 +1,10 @@
-
-
--- Create users table
+--  Create users table
 CREATE TABLE users (
   username VARCHAR(50) PRIMARY KEY,
   password VARCHAR(100) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  is_admin BOOLEAN NOT NULL DEFAULT FALSE
+  email VARCHAR(100) NOT NULL
 );
 
 -- Create coins table
@@ -28,7 +25,6 @@ CREATE TABLE watchlists (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create watchlist_items table
 CREATE TABLE watchlist_items (
   watchlist_item_id SERIAL PRIMARY KEY,
   watchlist_id INTEGER REFERENCES watchlists(watchlist_id) ON DELETE CASCADE,

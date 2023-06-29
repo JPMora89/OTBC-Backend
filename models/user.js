@@ -29,7 +29,7 @@ class User {
                   first_name AS "firstName",
                   last_name AS "lastName",
                   email,
-                  is_admin AS "isAdmin"
+                  
            FROM users
            WHERE username = $1`,
         [username],
@@ -57,7 +57,7 @@ class User {
    **/
 
   static async register(
-      { username, password, firstName, lastName, email, isAdmin }) {
+      { username, password, firstName, lastName, email }) {
     const duplicateCheck = await db.query(
           `SELECT username
            FROM users
@@ -77,17 +77,16 @@ class User {
             password,
             first_name,
             last_name,
-            email,
-            is_admin)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
+            email)
+           VALUES ($1, $2, $3, $4, $5)
+           RETURNING username, first_name AS "firstName", last_name AS "lastName", email`,
         [
           username,
           hashedPassword,
           firstName,
           lastName,
           email,
-          isAdmin,
+          
         ],
     );
 
@@ -122,20 +121,7 @@ class User {
    * Throws NotFoundError if user not found.
    **/
 
-  // static async get(username) {
-  //   const userRes = await db.query(
-  //         `SELECT username,
-  //                 first_name AS "firstName",
-  //                 last_name AS "lastName",
-  //                 email
-  //          FROM users
-  //          WHERE username = $1`,
-  //       [username],
-  //   );
 
-  //   const user = userRes.rows[0];
-
-  // }
   static async get(username) {
     const userRes = await db.query(
       `SELECT username,
@@ -215,74 +201,6 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
-
-  static async getWatchlist(username) {
-    const userRes = await db.query(
-      `SELECT id, coin_id, created_at
-       FROM watchlist
-       WHERE username = $1`,
-      [username]
-    );
-
-    if (userRes.rows.length === 0) {
-      throw new NotFoundError(`Watchlist not found for user: ${username}`);
-    }
-
-    return userRes.rows;
-  }
-
-  /** Add a coin to the user's watchlist.
-   *
-   * Returns the newly created watchlist entry:
-   *   { id, coin_id, created_at }
-   *
-   * Throws NotFoundError if user not found or coin already in watchlist.
-   **/
-  static async addToWatchlist(username, coinId) {
-    const duplicateCheck = await db.query(
-      `SELECT id
-       FROM watchlist
-       WHERE username = $1 AND coin_id = $2`,
-      [username, coinId]
-    );
-
-    if (duplicateCheck.rows[0]) {
-      throw new BadRequestError(`Coin already in watchlist`);
-    }
-
-    const result = await db.query(
-      `INSERT INTO watchlist
-       (username, coin_id)
-       VALUES ($1, $2)
-       RETURNING id, coin_id, created_at`,
-      [username, coinId]
-    );
-
-    return result.rows[0];
-  }
-
-  /** Remove a coin from the user's watchlist.
-   *
-   * Returns undefined.
-   *
-   * Throws NotFoundError if user not found or coin not in watchlist.
-   **/
-  static async removeFromWatchlist(username, coinId) {
-    const result = await db.query(
-      `DELETE
-       FROM watchlist
-       WHERE username = $1 AND coin_id = $2
-       RETURNING id`,
-      [username, coinId]
-    );
-
-    if (!result.rows[0]) {
-      throw new NotFoundError(`Watchlist entry not found`);
-    }
-  }
-
 }
-
-
 module.exports = User;
 

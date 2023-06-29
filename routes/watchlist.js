@@ -3,7 +3,7 @@
 const express = require("express");
 const { ensureLoggedIn } = require("../middleware/auth");
 const Watchlist = require("../models/watchlist");
-
+const User = require("../models/user");
 const router = express.Router();
 
 /** POST /watchlist/ => { watchlist }
@@ -14,10 +14,13 @@ const router = express.Router();
  **/
 router.post("/", ensureLoggedIn, async function (req, res, next) {
   try {
+
     const { username } = req.user;
     const { name } = req.body;
-
+    console.log(username, name)
+    console.log(req.body)
     const watchlist = await Watchlist.createWatchlist(username, name);
+    console.log(watchlist)
 
     return res.status(201).json({ watchlist });
   } catch (err) {
@@ -65,9 +68,9 @@ router.delete("/:coinId", ensureLoggedIn, async function (req, res, next) {
 });
 
 /** GET /watchlist => { watchlist: [ { coinId, name, symbol, price }, ... ] }
- *
+ 
  * Get the user's watchlist.
- *
+ 
  * Authorization required: authenticated user
  **/
 router.get("/", ensureLoggedIn, async function (req, res, next) {
