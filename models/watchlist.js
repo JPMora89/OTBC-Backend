@@ -43,6 +43,25 @@ class Watchlist {
     return result.rows;
   }
 
+  static async getAllWatchlists() {
+    const result = await db.query(
+      `SELECT watchlist_id, name, username
+       FROM watchlists`
+    );
+    return result.rows;
+  }
+
+  static async getWatchlists(username) {
+    const result = await db.query(
+      `SELECT watchlist_id, name
+       FROM watchlists
+       WHERE username = $1`,
+      [username]
+    );
+    return result.rows;
+  }
+  
+
   static async isInWatchlist(username, coinId) {
     const result = await db.query(
       `SELECT EXISTS (

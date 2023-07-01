@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/", ensureLoggedIn, async function (req, res, next) {
   try {
 
-    const { username } = req.user;
+    const { username } = res.locals.user;
     const { name } = req.body;
     console.log(username, name)
     console.log(req.body)
@@ -38,7 +38,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 router.post("/:coinId", ensureLoggedIn, async function (req, res, next) {
   try {
     const { coinId } = req.params;
-    const { username } = req.user;
+    const { username } = res.locals.user;
 
     await Watchlist.addToWatchlist(username, coinId);
 
@@ -57,7 +57,7 @@ router.post("/:coinId", ensureLoggedIn, async function (req, res, next) {
 router.delete("/:coinId", ensureLoggedIn, async function (req, res, next) {
   try {
     const { coinId } = req.params;
-    const { username } = req.user;
+    const { username } = res.locals.user;
 
     await Watchlist.removeFromWatchlist(username, coinId);
 
@@ -73,16 +73,30 @@ router.delete("/:coinId", ensureLoggedIn, async function (req, res, next) {
  
  * Authorization required: authenticated user
  **/
+// router.get("/", ensureLoggedIn, async function (req, res, next) {
+//   try {
+//     const { username } = res.locals.user;
+
+//     const watchlist = await Watchlist.getWatchlist(username);
+
+//     return res.json({ watchlist });
+//   } catch (err) {
+//     return next(err);
+//   }
+// });
+
+
 router.get("/", ensureLoggedIn, async function (req, res, next) {
   try {
-    const { username } = req.user;
+    const { username } = res.locals.user;
 
-    const watchlist = await Watchlist.getWatchlist(username);
+    const watchlists = await Watchlist.getWatchlists(username);
 
-    return res.json({ watchlist });
+    return res.json({ watchlists });
   } catch (err) {
     return next(err);
   }
 });
+
 
 module.exports = router;
