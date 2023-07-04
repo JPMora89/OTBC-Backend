@@ -11,6 +11,15 @@ class Watchlist {
     return result.rows[0].watchlist_id;
   }
 
+  static async deleteWatchlist(username, watchlistId) {
+    await db.query(
+      `DELETE FROM watchlists
+       WHERE watchlist_id = $1
+         AND username = $2`,
+      [watchlistId, username]
+    );
+  }
+
   static async addToWatchlist(username, coinId, watchlistId) {
     await db.query(
       `INSERT INTO watchlist_items (watchlist_id, coin_id)

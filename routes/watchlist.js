@@ -29,13 +29,40 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 });
 
 
+
+/** DELETE /watchlist/:watchlistId => { message: "Watchlist deleted" }
+ *
+ * Delete a watchlist.
+ *
+ * Authorization required: authenticated user
+ **/
+router.delete("/:watchlistId", ensureLoggedIn, async function (req, res, next) {
+  try {
+    const { watchlistId } = req.params;
+    const { username } = res.locals.user;
+
+    await Watchlist.deleteWatchlist(username, watchlistId);
+
+    return res.json({ message: "Watchlist deleted" });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+
+
+
+
+
+
 /** POST /watchlist/:coinId => { message: "Coin added to watchlist" }
  *
  * Add a coin to the user's watchlist.
  *
  * Authorization required: authenticated user
  **/
-router.post("/:coinId", ensureLoggedIn, async function (req, res, next) {
+router.post("/:watchlistId/:coinId", ensureLoggedIn, async function (req, res, next) {
   try {
     const { coinId } = req.params;
     const { username } = res.locals.user;
@@ -47,6 +74,13 @@ router.post("/:coinId", ensureLoggedIn, async function (req, res, next) {
     return next(err);
   }
 });
+
+
+
+
+
+
+
 
 /** DELETE /watchlist/:coinId => { message: "Coin removed from watchlist" }
  *
