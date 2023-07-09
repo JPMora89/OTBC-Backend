@@ -10,10 +10,13 @@ CREATE TABLE users (
 -- Create coins table
 CREATE TABLE coins (
   id SERIAL PRIMARY KEY,
-  coin_id VARCHAR(100) NOT NULL UNIQUE,
+  coin_id VARCHAR(20) NOT NULL,
   name VARCHAR(100) NOT NULL,
   symbol VARCHAR(10) NOT NULL,
   price FLOAT NOT NULL,
+  image VARCHAR(100) NOT NULL,
+  market_cap FLOAT NOT NULL,
+  price_change_percentage_24h FLOAT NOT NULL,
   last_updated TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -28,5 +31,5 @@ CREATE TABLE watchlists (
 CREATE TABLE watchlist_items (
   watchlist_item_id SERIAL PRIMARY KEY,
   watchlist_id INTEGER REFERENCES watchlists(watchlist_id) ON DELETE CASCADE,
-  coin_id VARCHAR(100) NOT NULL REFERENCES coins(coin_id) ON DELETE CASCADE
+  coin_id INTEGER NOT NULL REFERENCES coins(id) ON DELETE CASCADE
 );

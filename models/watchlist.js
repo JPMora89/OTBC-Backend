@@ -83,6 +83,18 @@ class Watchlist {
     );
     return result.rows[0].exists;
   }
+
+  static async getWatchlistItems(watchlistId) {
+    const result = await db.query(
+      `SELECT c.coin_id, c.name, c.symbol, c.price
+       FROM coins AS c
+       JOIN watchlist_items AS wi ON c.id = wi.coin_id
+       WHERE wi.watchlist_id = $1`,
+      [watchlistId]
+    );
+    return result.rows;
+  }
+
 }
 
 module.exports = Watchlist;

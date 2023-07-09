@@ -14,7 +14,7 @@ class Coin {
         params: {
           vs_currency: "usd",
           order: "market_cap_desc",
-          per_page: 50,
+          per_page: 25,
           page: 1,
           sparkline: false,
         },
@@ -29,9 +29,9 @@ class Coin {
 
       for (const coin of coins) {
         await db.query(
-          `INSERT INTO coins (coin_id, name, symbol, price)
-           VALUES ($1, $2, $3, $4)`,
-          [coin.id, coin.name, coin.symbol, coin.current_price]
+          `INSERT INTO coins (coin_id, name, symbol, price, image, market_cap, price_change_percentage_24h)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          [coin.id, coin.name, coin.symbol, coin.current_price, coin.image, coin.market_cap, coin.price_change_percentage_24h]
         );
       }
 
@@ -43,14 +43,14 @@ class Coin {
 
   /** Get all coins from the database */
   static async getAllCoins() {
-    const result = await db.query("SELECT * FROM coins ORDER BY name");
+    const result = await db.query("SELECT * FROM coins ORDER BY id");
     return result.rows;
   }
 
   /** Get coin by coin_id */
-  static async getCoinById(coinId) {
-    const result = await db.query("SELECT * FROM coins WHERE coin_id = $1", [
-      coinId,
+  static async getCoinById(id) {
+    const result = await db.query("SELECT * FROM coins WHERE id = $1", [
+      id,
     ]);
 
     if (result.rows.length === 0) {

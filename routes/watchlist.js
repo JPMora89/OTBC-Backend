@@ -65,9 +65,10 @@ router.delete("/:watchlistId", ensureLoggedIn, async function (req, res, next) {
 router.post("/:watchlistId/:coinId", ensureLoggedIn, async function (req, res, next) {
   try {
     const { coinId } = req.params;
+    const { watchlistId } = req.params;
     const { username } = res.locals.user;
 
-    await Watchlist.addToWatchlist(username, coinId);
+    await Watchlist.addToWatchlist(username, coinId, watchlistId);
 
     return res.json({ message: "Coin added to watchlist" });
   } catch (err) {
@@ -77,7 +78,32 @@ router.post("/:watchlistId/:coinId", ensureLoggedIn, async function (req, res, n
 
 
 
+/** GET /watchlist/:watchlistId/items => { watchlistItems: [ { coinId, name, symbol, price }, ... ] }
+ *
+ * Get the watchlist items for a specific watchlist.
+ *
+ * Authorization required: authenticated user
+ **/
+router.get("/:watchlistId/items", ensureLoggedIn, async function (req, res, next) {
+  try {
+    const { watchlistId } = req.params;
+    const { username } = res.locals.user;
 
+    // Check if the user has access to the specified watchlist
+    const userWatchlists = await Watchlist.getWatchlists(username);
+    const watchlistExists = userWatchlists.some((watchlist) => watchlist.watchlist_id === parseInt(watchlistId));
+    if (!watchlistExists) {
+      return res.status(403).json({ error: "You don't have access to this watchlist" });
+    }
+
+    // Fetch the watchlist items
+    const watchlistItems = await Watchlist.getWatchlistItems(parseInt(watchlistId));
+
+    return res.json({ watchlistItems });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 
 

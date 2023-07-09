@@ -10,6 +10,9 @@
       "symbol": {
         "type": "string"
       },
+      "image": {
+        "type": "string"
+      },
       "market_cap": {
         "type": "number"
       },
