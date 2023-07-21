@@ -80,6 +80,35 @@ router.get("/:coinId", async function (req, res, next) {
   }
 });
 
+// Get coin by name
+router.get("/name/:coinName", async function (req, res, next) {
+  try {
+    const coin = await Coin.getCoinByName(req.params.coinName);
+    if (!coin) {
+      return res.status(404).json({ message: "Coin not found" });
+    }
+    return res.json({ coin });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// Get coin by name or symbol
+router.get("/name-or-symbol/:coinNameOrSymbol", async function (req, res, next) {
+  try {
+    const coin = await Coin.getCoinByNameOrSymbol(req.params.coinNameOrSymbol);
+    console.log("This function is running")
+    if (!coin) {
+      return res.status(404).json({ message: "Coin not found" });
+    }
+    return res.json({ coin });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+
 
 
 

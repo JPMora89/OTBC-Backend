@@ -14,7 +14,7 @@ class Coin {
         params: {
           vs_currency: "usd",
           order: "market_cap_desc",
-          per_page: 25,
+          per_page: 250,
           page: 1,
           sparkline: false,
         },
@@ -43,7 +43,7 @@ class Coin {
 
   /** Get all coins from the database */
   static async getAllCoins() {
-    const result = await db.query("SELECT * FROM coins ORDER BY id");
+    const result = await db.query("SELECT * FROM coins ORDER BY id LIMIT 25");
     return result.rows;
   }
 
@@ -59,6 +59,51 @@ class Coin {
 
     return result.rows[0];
   }
+
+  /** Get coin by name */
+  // static async getCoinByName(name) {
+  //   const result = await db.query("SELECT * FROM coins WHERE name = $1", [
+  //     name,
+  //   ]);
+
+  //   if (result.rows.length === 0) {
+  //     return null;
+  //   }
+
+  //   return result.rows[0];
+  // }
+
+
+  // Get coin by name or symbol
+// Get coin by name or symbol
+static async getCoinByNameOrSymbol(coinNameOrSymbol) {
+  const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); // Convert the input to lowercase
+  const result = await db.query(
+    "SELECT * FROM coins WHERE LOWER(name) = $1 OR LOWER(symbol) = $1",
+    [lowercaseNameOrSymbol]
+  );
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+}
+
+  /** Get coin by name */
+static async getCoinByName(name) {
+  const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
+  const result = await db.query("SELECT * FROM coins WHERE LOWER(name) = $1", [
+    lowercaseName,
+  ]);
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+}
+
 }
 
 module.exports = Coin;

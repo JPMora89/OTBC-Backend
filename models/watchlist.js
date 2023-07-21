@@ -28,6 +28,7 @@ class Watchlist {
     );
   }
 
+
   static async removeFromWatchlist(username, coinId) {
     await db.query(
       `DELETE FROM watchlist_items
