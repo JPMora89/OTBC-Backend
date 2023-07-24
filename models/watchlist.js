@@ -29,15 +29,23 @@ class Watchlist {
   }
 
 
-  static async removeFromWatchlist(username, coinId) {
+  // static async removeFromWatchlist(username, coinId, watchlistId) {
+  //   await db.query(
+  //     `DELETE FROM watchlist_items
+  //      WHERE watchlist_id IN (
+  //        SELECT watchlist_id
+  //        FROM watchlists
+  //        WHERE username = $1
+  //      ) AND coin_id = $2`,
+  //     [watchlistId, coinId]
+  //   );
+  // }
+  static async removeFromWatchlist(username, coinId, watchlistId) {
     await db.query(
       `DELETE FROM watchlist_items
-       WHERE watchlist_id IN (
-         SELECT watchlist_id
-         FROM watchlists
-         WHERE username = $1
-       ) AND coin_id = $2`,
-      [username, coinId]
+       WHERE watchlist_id = $1
+         AND coin_id = $2`,
+      [watchlistId, coinId]
     );
   }
 
@@ -85,16 +93,30 @@ class Watchlist {
     return result.rows[0].exists;
   }
 
+  // static async getWatchlistItems(watchlistId) {
+  //   const result = await db.query(
+  //     `SELECT c.coin_id, c.name, c.symbol, c.price
+  //      FROM coins AS c
+  //      JOIN watchlist_items AS wi ON c.id = wi.coin_id
+  //      WHERE wi.watchlist_id = $1`,
+  //     [watchlistId]
+  //   );
+  //   console.log(result.rows)
+  //   return result.rows;
+  // }
   static async getWatchlistItems(watchlistId) {
     const result = await db.query(
-      `SELECT c.coin_id, c.name, c.symbol, c.price
+      `SELECT c.coin_id, c.name, c.symbol, c.price, w.watchlist_id, w.name AS watchlist_name
        FROM coins AS c
        JOIN watchlist_items AS wi ON c.id = wi.coin_id
+       JOIN watchlists AS w ON wi.watchlist_id = w.watchlist_id
        WHERE wi.watchlist_id = $1`,
       [watchlistId]
     );
+    console.log(result.rows);
     return result.rows;
   }
+  
 
 }
 

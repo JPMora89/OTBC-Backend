@@ -21,7 +21,7 @@ class Coin {
       });
 
       const coins = response.data;
-      console.log(coins, "here are the coins!");
+      // console.log(coins, "here are the coins!");
 
       // Update coins table in the database
       await db.query("DELETE FROM watchlist_items");
@@ -75,6 +75,21 @@ class Coin {
 
 
   // Get coin by name or symbol
+  static async getCoinByName(name) {
+    const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
+    const result = await db.query(
+      "SELECT * FROM coins WHERE LOWER(name) = REPLACE($1, '-', ' ')",
+      [lowercaseName]
+    );
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    return result.rows[0];
+  }
+
+
 // Get coin by name or symbol
 static async getCoinByNameOrSymbol(coinNameOrSymbol) {
   const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); // Convert the input to lowercase
@@ -91,18 +106,18 @@ static async getCoinByNameOrSymbol(coinNameOrSymbol) {
 }
 
   /** Get coin by name */
-static async getCoinByName(name) {
-  const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
-  const result = await db.query("SELECT * FROM coins WHERE LOWER(name) = $1", [
-    lowercaseName,
-  ]);
+// static async getCoinByName(name) {
+//   const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
+//   const result = await db.query("SELECT * FROM coins WHERE LOWER(name) = $1", [
+//     lowercaseName,
+//   ]);
 
-  if (result.rows.length === 0) {
-    return null;
-  }
+//   if (result.rows.length === 0) {
+//     return null;
+//   }
 
-  return result.rows[0];
-}
+//   return result.rows[0];
+// }
 
 }
 

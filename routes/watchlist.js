@@ -17,10 +17,10 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 
     const { username } = res.locals.user;
     const { name } = req.body;
-    console.log(username, name)
-    console.log(req.body)
+    // console.log(username, name)
+    // console.log(req.body)
     const watchlist = await Watchlist.createWatchlist(username, name);
-    console.log(watchlist)
+    // console.log(watchlist)
 
     return res.status(201).json({ watchlist });
   } catch (err) {
@@ -114,18 +114,32 @@ router.get("/:watchlistId/items", ensureLoggedIn, async function (req, res, next
  *
  * Authorization required: authenticated user
  **/
-router.delete("/:coinId", ensureLoggedIn, async function (req, res, next) {
+// router.delete("/:coinId", ensureLoggedIn, async function (req, res, next) {
+//   try {
+//     const { coinId } = req.params;
+//     const { username } = res.locals.user;
+
+//     await Watchlist.removeFromWatchlist(username, coinId);
+
+//     return res.json({ message: "Coin removed from watchlist" });
+//   } catch (err) {
+//     return next(err);
+//   }
+// });
+router.delete("/:watchlistId/:coinId", ensureLoggedIn, async function (req, res, next) {
   try {
-    const { coinId } = req.params;
+    const { coinId, watchlistId } = req.params;
     const { username } = res.locals.user;
 
-    await Watchlist.removeFromWatchlist(username, coinId);
+    await Watchlist.removeFromWatchlist(username, coinId, watchlistId);
 
     return res.json({ message: "Coin removed from watchlist" });
   } catch (err) {
     return next(err);
   }
 });
+
+
 
 /** GET /watchlist => { watchlist: [ { coinId, name, symbol, price }, ... ] }
  

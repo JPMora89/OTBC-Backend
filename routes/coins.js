@@ -18,7 +18,7 @@ const router = express.Router();
 router.get("/", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.updateCoins();
-    console.log(coins)
+    // console.log(coins)
     return res.json({ coins });
     
   } catch (err) {
@@ -37,7 +37,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
 router.post("/", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.updateCoins();
-    console.log(coins)
+    // console.log(coins)
     return res.json({ coins });
     
   } catch (err) {
@@ -54,7 +54,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 router.get("/all", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.getAllCoins();
-    console.log(coins)
+    // console.log(coins)
     return res.json({ coins });
   } catch (err) {
     return next(err);
@@ -80,6 +80,8 @@ router.get("/:coinId", async function (req, res, next) {
   }
 });
 
+
+
 // Get coin by name
 router.get("/name/:coinName", async function (req, res, next) {
   try {
@@ -92,6 +94,8 @@ router.get("/name/:coinName", async function (req, res, next) {
     return next(err);
   }
 });
+
+
 
 // Get coin by name or symbol
 router.get("/name-or-symbol/:coinNameOrSymbol", async function (req, res, next) {

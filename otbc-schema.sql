@@ -10,13 +10,13 @@ CREATE TABLE users (
 -- Create coins table
 CREATE TABLE coins (
   id SERIAL PRIMARY KEY,
-  coin_id VARCHAR(20) NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  symbol VARCHAR(10) NOT NULL,
+  coin_id VARCHAR(50) NOT NULL,
+  name VARCHAR(500) NOT NULL,
+  symbol VARCHAR(50) NOT NULL,
   price FLOAT NOT NULL,
-  image VARCHAR(100) NOT NULL,
+  image VARCHAR(500),
   market_cap FLOAT NOT NULL,
-  price_change_percentage_24h FLOAT NOT NULL,
+  price_change_percentage_24h FLOAT,
   last_updated TIMESTAMPTZ DEFAULT NOW()
 );
 
