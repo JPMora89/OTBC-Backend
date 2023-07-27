@@ -6,42 +6,22 @@ const Coin = require("../models/coins");
 
 const router = express.Router();
 
-// router.post("/update", ensureLoggedIn, async function (req, res, next) {
-//   try {
-//     await Coin.updateCoins();
-//     return res.json({ message: "Coins data updated" });
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
-
 router.get("/", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.updateCoins();
-    // console.log(coins)
     return res.json({ coins });
-    
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return next(err);
   }
 });
 
-/** GET /coins => { coins: [ { coin_id, name, symbol, price }, ... ] }
- *
- * Returns the list of all coins.
- *
- * Authorization required: None
- **/
-
 router.post("/", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.updateCoins();
-    // console.log(coins)
     return res.json({ coins });
-    
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return next(err);
   }
 });
@@ -54,7 +34,6 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 router.get("/all", ensureLoggedIn, async function (req, res, next) {
   try {
     const coins = await Coin.getAllCoins();
-    // console.log(coins)
     return res.json({ coins });
   } catch (err) {
     return next(err);
@@ -80,8 +59,6 @@ router.get("/:coinId", async function (req, res, next) {
   }
 });
 
-
-
 // Get coin by name
 router.get("/name/:coinName", async function (req, res, next) {
   try {
@@ -95,26 +72,23 @@ router.get("/name/:coinName", async function (req, res, next) {
   }
 });
 
-
-
 // Get coin by name or symbol
-router.get("/name-or-symbol/:coinNameOrSymbol", async function (req, res, next) {
-  try {
-    const coin = await Coin.getCoinByNameOrSymbol(req.params.coinNameOrSymbol);
-    console.log("This function is running")
-    if (!coin) {
-      return res.status(404).json({ message: "Coin not found" });
+router.get(
+  "/name-or-symbol/:coinNameOrSymbol",
+  async function (req, res, next) {
+    try {
+      const coin = await Coin.getCoinByNameOrSymbol(
+        req.params.coinNameOrSymbol
+      );
+      console.log("This function is running");
+      if (!coin) {
+        return res.status(404).json({ message: "Coin not found" });
+      }
+      return res.json({ coin });
+    } catch (err) {
+      return next(err);
     }
-    return res.json({ coin });
-  } catch (err) {
-    return next(err);
   }
-});
-
-
-
-
-
-
+);
 
 module.exports = router;

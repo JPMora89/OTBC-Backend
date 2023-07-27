@@ -13,7 +13,6 @@ const userNewSchema = require("../schemas/userNew.json");
 const userUpdateSchema = require("../schemas/userUpdate.json");
 const Watchlist = require("../models/watchlist");
 
-
 const router = express.Router();
 
 // Middleware to authenticate the JWT token
@@ -34,7 +33,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -57,8 +56,6 @@ router.post("/watchlist", ensureLoggedIn, async function (req, res, next) {
     const { watchlistName } = req.body;
     const { username } = res.locals.user; // Access the username from res.locals.user
 
-    // Perform any necessary validation on watchlistName
-
     // Create the new watchlist
     const watchlist = await Watchlist.createWatchlist(username, watchlistName);
 
@@ -67,7 +64,6 @@ router.post("/watchlist", ensureLoggedIn, async function (req, res, next) {
     return next(err);
   }
 });
-
 
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
@@ -85,10 +81,9 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
   }
 });
 
-
 /** GET /[username] => { user }
  *
- * Returns { username, firstName, lastName
+ * Returns username, firstName, lastName
  **/
 
 router.get("/:username", ensureLoggedIn, async function (req, res, next) {
@@ -100,22 +95,20 @@ router.get("/:username", ensureLoggedIn, async function (req, res, next) {
   }
 });
 
-
 /** PATCH /[username] { user } => { user }
  *
  * Data can include:
  *   { firstName, lastName, password, email }
  *
  * Returns { username, firstName, lastName, email }
- *
- * Authorization required: admin or same-user-as-:username
+
  **/
 
 router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userUpdateSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -125,7 +118,6 @@ router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
     return next(err);
   }
 });
-
 
 /** DELETE /[username]  =>  { deleted: username }
  *
@@ -140,9 +132,5 @@ router.delete("/:username", ensureLoggedIn, async function (req, res, next) {
     return next(err);
   }
 });
-
-
-
-
 
 module.exports = router;

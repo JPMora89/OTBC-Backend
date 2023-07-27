@@ -1,5 +1,3 @@
-
-
 const db = require("../db");
 const axios = require("axios");
 
@@ -9,7 +7,6 @@ class Coin {
   /** Fetch coin data from the API and update the coins table in the database */
   static async updateCoins() {
     try {
-      // Fetch coin data from the API
       const response = await axios.get(`${BASE_URL}/coins/markets`, {
         params: {
           vs_currency: "usd",
@@ -31,7 +28,15 @@ class Coin {
         await db.query(
           `INSERT INTO coins (coin_id, name, symbol, price, image, market_cap, price_change_percentage_24h)
            VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [coin.id, coin.name, coin.symbol, coin.current_price, coin.image, coin.market_cap, coin.price_change_percentage_24h]
+          [
+            coin.id,
+            coin.name,
+            coin.symbol,
+            coin.current_price,
+            coin.image,
+            coin.market_cap,
+            coin.price_change_percentage_24h,
+          ]
         );
       }
 
@@ -48,9 +53,9 @@ class Coin {
   }
 
   /** Get coin by coin_id */
-  static async getCoinById(id) {
-    const result = await db.query("SELECT * FROM coins WHERE id = $1", [
-      id,
+  static async getCoinById(CoinId) {
+    const result = await db.query("SELECT * FROM coins WHERE coin_id = $1", [
+      CoinId,
     ]);
 
     if (result.rows.length === 0) {
@@ -60,21 +65,7 @@ class Coin {
     return result.rows[0];
   }
 
-  /** Get coin by name */
-  // static async getCoinByName(name) {
-  //   const result = await db.query("SELECT * FROM coins WHERE name = $1", [
-  //     name,
-  //   ]);
-
-  //   if (result.rows.length === 0) {
-  //     return null;
-  //   }
-
-  //   return result.rows[0];
-  // }
-
-
-  // Get coin by name or symbol
+  // Get coin by name
   static async getCoinByName(name) {
     const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
     const result = await db.query(
@@ -89,37 +80,21 @@ class Coin {
     return result.rows[0];
   }
 
+  // Get coin by name or symbol
+  static async getCoinByNameOrSymbol(coinNameOrSymbol) {
+    const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); // Convert the input to lowercase
+    const result = await db.query(
+      "SELECT * FROM coins WHERE LOWER(name) = $1 OR LOWER(symbol) = $1",
+      [lowercaseNameOrSymbol]
+    );
 
-// Get coin by name or symbol
-static async getCoinByNameOrSymbol(coinNameOrSymbol) {
-  const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); // Convert the input to lowercase
-  const result = await db.query(
-    "SELECT * FROM coins WHERE LOWER(name) = $1 OR LOWER(symbol) = $1",
-    [lowercaseNameOrSymbol]
-  );
+    if (result.rows.length === 0) {
+      return null;
+    }
 
-  if (result.rows.length === 0) {
-    return null;
+    return result.rows[0];
   }
-
-  return result.rows[0];
-}
-
-  /** Get coin by name */
-// static async getCoinByName(name) {
-//   const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
-//   const result = await db.query("SELECT * FROM coins WHERE LOWER(name) = $1", [
-//     lowercaseName,
-//   ]);
-
-//   if (result.rows.length === 0) {
-//     return null;
-//   }
-
-//   return result.rows[0];
-// }
 
 }
 
 module.exports = Coin;
-
