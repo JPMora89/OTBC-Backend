@@ -16,7 +16,7 @@ class Coin {
           sparkline: false,
         },
       });
-
+// create if else, create or update
       const coins = response.data;
       // console.log(coins, "here are the coins!");
 
@@ -67,7 +67,7 @@ class Coin {
 
   // Get coin by name
   static async getCoinByName(name) {
-    const lowercaseName = name.toLowerCase(); // Convert the name to lowercase
+    const lowercaseName = name.toLowerCase(); 
     const result = await db.query(
       "SELECT * FROM coins WHERE LOWER(name) = REPLACE($1, '-', ' ')",
       [lowercaseName]
@@ -82,7 +82,7 @@ class Coin {
 
   // Get coin by name or symbol
   static async getCoinByNameOrSymbol(coinNameOrSymbol) {
-    const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); // Convert the input to lowercase
+    const lowercaseNameOrSymbol = coinNameOrSymbol.toLowerCase(); 
     const result = await db.query(
       "SELECT * FROM coins WHERE LOWER(name) = $1 OR LOWER(symbol) = $1",
       [lowercaseNameOrSymbol]
