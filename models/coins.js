@@ -4,7 +4,6 @@ const axios = require("axios");
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
 class Coin {
-  /** Fetch coin data from the API and update the coins table in the database */
   static async updateCoins() {
     try {
       const response = await axios.get(`${BASE_URL}/coins/markets`, {
