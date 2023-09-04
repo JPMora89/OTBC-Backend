@@ -84,7 +84,7 @@ router.get("/news/:coinId", async function (req, res, next) {
 
     // Make a request to the cryptopanic.com API for news related to the coinId
     const response = await axios.get(
-      `https://cryptopanic.com/api/v1/posts/?auth_token=YOUR_AUTH_TOKEN&public=true&currencies=${coinId}`
+      `https://cryptopanic.com/api/v1/posts/?auth_token=12a2442613bd9a59f7b47b9c8da4001642d3b126&public=true&currencies=${coinId}`
     );
 
     // Extract and send the news data from the API response
