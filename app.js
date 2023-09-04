@@ -31,9 +31,9 @@ app.use("/watchlist", watchlistRoutes);
 
 
 /** Handle 404 errors -- this matches everything */
-app.use(function (req, res, next) {
-  return next(new NotFoundError());
-});
+// app.use(function (req, res, next) {
+//   return next(new NotFoundError());
+// });
 
 /** Generic error handler; anything unhandled goes here. */
 app.use(function (err, req, res, next) {
