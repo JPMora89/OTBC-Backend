@@ -2,6 +2,7 @@
 
 const express = require("express");
 const { ensureLoggedIn } = require("../middleware/auth");
+const axios = require("axios");
 const Coin = require("../models/coins");
 
 const router = express.Router();
