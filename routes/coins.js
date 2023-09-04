@@ -72,6 +72,32 @@ router.get("/name/:coinName", async function (req, res, next) {
   }
 });
 
+/** GET /coins/news/:coinId => { news }
+ *
+ * Returns news related to a specific coin.
+ *
+ * Authorization required: None
+ **/
+router.get("/news/:coinId", async function (req, res, next) {
+  try {
+    const coinId = req.params.coinId;
+
+    // Make a request to the cryptopanic.com API for news related to the coinId
+    const response = await axios.get(
+      `https://cryptopanic.com/api/v1/posts/?auth_token=YOUR_AUTH_TOKEN&public=true&currencies=${coinId}`
+    );
+
+    // Extract and send the news data from the API response
+    const news = response.data.results;
+
+    return res.json({ news });
+  } catch (err) {
+    console.error("Error fetching coin news:", err);
+    return next(err);
+  }
+});
+
+
 // Get coin by name or symbol
 router.get(
   "/name-or-symbol/:coinNameOrSymbol",
