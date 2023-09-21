@@ -1,4 +1,3 @@
---  Create users table
 CREATE TABLE users (
   username VARCHAR(50) PRIMARY KEY,
   password VARCHAR(100) NOT NULL,
@@ -7,10 +6,9 @@ CREATE TABLE users (
   email VARCHAR(100) NOT NULL
 );
 
--- Create coins table
 CREATE TABLE coins (
   id SERIAL PRIMARY KEY,
-  coin_id VARCHAR(50) NOT NULL,
+  coin_id VARCHAR(50) NOT NULL UNIQUE,
   name VARCHAR(500) NOT NULL,
   symbol VARCHAR(50) NOT NULL,
   price FLOAT NOT NULL,
@@ -20,7 +18,6 @@ CREATE TABLE coins (
   last_updated TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create watchlists table
 CREATE TABLE watchlists (
   watchlist_id SERIAL PRIMARY KEY,
   username VARCHAR(50) REFERENCES users(username) ON DELETE CASCADE,
@@ -41,3 +38,6 @@ GRANT SELECT ON TABLE coins TO PUBLIC;
 
 GRANT SELECT, INSERT ON TABLE watchlists TO PUBLIC;
 GRANT SELECT, INSERT ON TABLE watchlist_items TO PUBLIC;
+
+-- ALTER TABLE coins
+-- ADD CONSTRAINT unique_coin_id UNIQUE (coin_id);
